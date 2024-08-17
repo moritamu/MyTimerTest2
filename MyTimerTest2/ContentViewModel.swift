@@ -9,16 +9,25 @@ import Foundation
 import Combine
 
 final class ContentViewModel: ObservableObject{
-    @Published var count = 0
+    @Published var count :Int
     @Published var isTimerRunning = false
-    
+    init(count: Int, isTimerRunning: Bool = false, cancellable: AnyCancellable? = nil) {
+        self.count = count
+        self.isTimerRunning = isTimerRunning
+        self.cancellable = cancellable
+    }
     private var cancellable: AnyCancellable?
     
     func startCounting() {
         isTimerRunning = true
         cancellable = Timer.publish(every: 1.0, on: .main, in: .common).autoconnect()
             .sink{_ in
-                self.count += 1
+                if (self.count > 0){
+                    self.count -= 1
+                } else {
+                    self.isTimerRunning = false
+                    self.cancellable?.cancel()
+                }
             }
     }
     func stopCounting() {
@@ -26,6 +35,6 @@ final class ContentViewModel: ObservableObject{
         cancellable?.cancel()
     }
     func resetCount() {
-        count = 0
+        count = 5
     }
 }
