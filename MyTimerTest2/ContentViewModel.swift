@@ -17,7 +17,7 @@ final class ContentViewModel: ObservableObject{
     func startCounting() {
         isTimerRunning = true
         cancellable = Timer.publish(every: 1.0, on: .main, in: .common).autoconnect()
-            .sink{ _ in
+            .sink{_ in
                 self.count += 1
             }
     }

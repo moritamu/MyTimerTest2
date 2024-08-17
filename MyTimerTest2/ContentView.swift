@@ -8,17 +8,38 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject private var viewModel: ContentViewModel
+    
+    init(viewModel: ContentViewModel) {
+        self.viewModel = viewModel
+    }
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Text("\(viewModel.count)")
+                .font(.title)
+                .fontWeight(.bold)
+                .padding()
+            
+            Button("Start"){
+                viewModel.startCounting()
+            }
+            .disabled(viewModel.isTimerRunning)
+            
+            Button("Stop"){
+                viewModel.stopCounting()
+            }
+            .disabled(!viewModel.isTimerRunning)
+            .padding()
+            
+            Button("reset"){
+                viewModel.stopCounting()
+                viewModel.resetCount()
+            }
         }
-        .padding()
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView(viewModel: ContentViewModel())
 }
